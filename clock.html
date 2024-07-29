@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Digital Clock</title>
+    <style>
+      .clock-body {
+        font-family: "Arial", sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .digital-clock {
+        font-size: 2rem;
+        color: #333;
+        font-weight: bold;
+      }
+      .main {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+      }
+      p {
+        font-size: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="clock" class="digital-clock clock-body"></div>
+
+    <script>
+      function updateClock() {
+        const now = new Date();
+        const days = now.getDay().toString().padStart(2, "0");
+        const hours = now.getHours().toString().padStart(2, "0");
+        const minutes = now.getMinutes().toString().padStart(2, "0");
+        const seconds = now.getSeconds().toString().padStart(2, "0");
+
+        const clockElement = document.getElementById("clock");
+        clockElement.innerHTML = `<div class="main">
+      <div class="time-section">
+        <div><p>Days</p></div>
+        <div>${days}</div>
+      </div>
+      <div class="time-section">
+        <div><p>Hours</p></div>
+        <div>${hours}</div>
+      </div>
+      <div class="time-section">
+        <div><p>minutes</p></div>
+        <div>${minutes}</div>
+      </div>
+      <div class="time-section">
+        <div><p>seconds</p></div>
+        <div>${seconds}</div>
+      </div>
+    </div>`;
+      }
+
+      function startClock() {
+        updateClock();
+        setInterval(updateClock, 1000);
+      }
+
+      document.addEventListener("DOMContentLoaded", startClock);
+    </script>
+  </body>
+</html>

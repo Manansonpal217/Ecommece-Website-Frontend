@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <style>
+      #dropdown {
+        display: none;
+        position: absolute;
+        border: 1px solid #ccc;
+        border-top: none;
+        width: 200px;
+        max-height: 200px;
+        overflow-y: auto;
+      }
+
+      #dropdown a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: #333;
+        cursor: pointer;
+      }
+
+      #dropdown a:hover {
+        background-color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" id="search" />
+    <div id="dropdown"></div>
+
+    <script>
+      $(document).ready(function () {
+        $("#search").on("input", function () {
+          updateDropdown($(this).val());
+        });
+
+        // Close the dropdown when clicking outside of it
+        $(document).on("click", function (event) {
+          const dropdown = $("#dropdown");
+          if (!$(event.target).is("#search") && !$(event.target).is(dropdown)) {
+            dropdown.hide();
+          }
+        });
+      });
+
+      function updateDropdown(searchValue) {
+        // Mocked product data (replace with your actual product data)
+        const imageData =
+          JSON.parse(localStorage.getItem("Product_Image")) || [];
+
+        const dropdown = $("#dropdown");
+        dropdown.empty();
+
+        const matchingProducts = imageData.filter((product) =>
+          product.Description.includes(searchValue)
+        );
+
+        if (matchingProducts.length > 0) {
+          console.log("Here matching");
+          $.each(matchingProducts, function (index, product) {
+            const productElement = $("<a>", {
+              html: `<div style="display:flex; justify-content:space-between;"><div>${product.Description}</div> <div> <img src ="${product.Images[0]}" style="height:30px; width:30px"></div>`,
+              click: function () {
+                $("#search").val(product.Description);
+                dropdown.hide();
+                redirectProduct(product.Id);
+              },
+            });
+            dropdown.append(productElement);
+          });
+
+          dropdown.show();
+        } else {
+          //   console.log("manan");
+          const noMatchElement = $("<a>", {
+            text: "No products matched",
+            class: "no-match-message",
+            click: function () {
+              $("#search").val("No products matched");
+              dropdown.hide();
+            },
+          });
+          dropdown.html(noMatchElement);
+          dropdown.show();
+        }
+      }
+
+      function redirectProduct(Id) {
+        window.location.href = `product.html?Id=${Id}`;
+      }
+    </script>
+  </body>
+</html>
